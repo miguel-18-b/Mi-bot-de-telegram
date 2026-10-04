@@ -2,11 +2,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gana por Anuncios</title>
-</head><body>
-  <h1>🤖 Gana por Anuncios</h1>
-  <p>Bienvenido a nuestro bot de Telegram.</p>  <a href="https://t.me/Ganaporanuncios_bot" target="_blank">
-    <button>🚀 Abrir bot en Telegram</button>
-  </a>
-</body>
+  <title>Ganar por Anuncios</title>  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 30px 20px;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    .contenedor {
+      max-width: 420px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .puntos {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    #ganar {
+      background: #229ed9;
+      color: white;
+    }
+
+    #bot {
+      background: #e9eef2;
+      color: #222;
+    }
+
+    #mensaje {
+      margin-top: 20px;
+      min-height: 25px;
+    }
+  </style></head><body>  <div class="contenedor"><h1>🤖 Gana por Anuncios</h1>
+
+<p>Bienvenido, amigo 👋</p>
+
+<div class="puntos">
+  💰 0 puntos
+</div>
+
+<button id="ganar" onclick="prepararAnuncio()">
+  📺 Ganar con anuncios
+</button>
+
+<a href="https://t.me/Ganaporanuncios_bot" target="_blank">
+  <button id="bot">
+    🚀 Abrir bot en Telegram
+  </button>
+</a>
+
+<div id="mensaje"></div>
+
+  </div>  <script>
+    function prepararAnuncio() {
+      const mensaje = document.getElementById("mensaje");
+
+      mensaje.innerHTML =
+        "📺 Sistema de anuncios<br><br>" +
+        "El botón funciona correctamente.<br>" +
+        "Estamos preparando la conexión con el proveedor de anuncios.";
+    }
+  </script></body>
 </html>
