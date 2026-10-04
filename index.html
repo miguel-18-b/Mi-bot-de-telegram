@@ -22,7 +22,7 @@
     }
 
     h1 {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .puntos {
@@ -53,17 +53,17 @@
 
     #mensaje {
       margin-top: 20px;
-      min-height: 25px;
+      min-height: 30px;
     }
   </style></head><body>  <div class="contenedor"><h1>🤖 Gana por Anuncios</h1>
 
 <p>Bienvenido, amigo 👋</p>
 
-<div class="puntos">
+<div class="puntos" id="puntos">
   💰 0 puntos
 </div>
 
-<button id="ganar" onclick="prepararAnuncio()">
+<button id="ganar" onclick="verAnuncio()">
   📺 Ganar con anuncios
 </button>
 
@@ -76,13 +76,59 @@
 <div id="mensaje"></div>
 
   </div>  <script>
-    function prepararAnuncio() {
+
+    let puntos = 0;
+    let anuncioActivo = false;
+
+    function verAnuncio() {
+
+      if (anuncioActivo) {
+        return;
+      }
+
+      anuncioActivo = true;
+
+      const boton = document.getElementById("ganar");
       const mensaje = document.getElementById("mensaje");
 
+      boton.disabled = true;
+
+      let segundos = 10;
+
       mensaje.innerHTML =
-        "📺 Sistema de anuncios<br><br>" +
-        "El botón funciona correctamente.<br>" +
-        "Estamos preparando la conexión con el proveedor de anuncios.";
+        "📺 ANUNCIO DE PRUEBA<br><br>" +
+        "Espera " + segundos + " segundos...";
+
+      const contador = setInterval(function() {
+
+        segundos--;
+
+        if (segundos > 0) {
+
+          mensaje.innerHTML =
+            "📺 ANUNCIO DE PRUEBA<br><br>" +
+            "Espera " + segundos + " segundos...";
+
+        } else {
+
+          clearInterval(contador);
+
+          puntos += 25;
+
+          document.getElementById("puntos").innerHTML =
+            "💰 " + puntos + " puntos";
+
+          mensaje.innerHTML =
+            "✅ Anuncio de prueba completado.<br><br>" +
+            "🎁 +25 puntos de prueba";
+
+          boton.disabled = false;
+
+          anuncioActivo = false;
+        }
+
+      }, 1000);
     }
+
   </script></body>
 </html>
