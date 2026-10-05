@@ -1,134 +1,50 @@
 <!DOCTYPE html><html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ganar por Anuncios</title>  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 30px 20px;
-      background: #f4f6f8;
-      color: #222;
-    }
-
-    .contenedor {
-      max-width: 420px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-    }
-
-    h1 {
-      margin-bottom: 8px;
-    }
-
-    .puntos {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 20px 0;
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 12px;
-      border: none;
-      border-radius: 12px;
-      font-size: 17px;
-      cursor: pointer;
-    }
-
-    #ganar {
-      background: #229ed9;
-      color: white;
-    }
-
-    #bot {
-      background: #e9eef2;
-      color: #222;
-    }
-
-    #mensaje {
-      margin-top: 20px;
-      min-height: 30px;
-    }
-  </style></head><body>  <div class="contenedor"><h1>🤖 Gana por Anuncios</h1>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ganar por Anuncios</title>
+<style>
+body{font-family:Arial;text-align:center;margin:0;padding:30px 20px;background:#f4f6f8;color:#222}
+.contenedor{max-width:420px;margin:auto;background:white;padding:25px;border-radius:18px;box-shadow:0 4px 15px rgba(0,0,0,.12)}
+.puntos{font-size:28px;font-weight:bold;margin:20px 0}
+button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:12px;font-size:17px}
+#ganar{background:#229ed9;color:white}
+#bot{background:#e9eef2;color:#222}
+#mensaje{margin-top:20px;min-height:30px}
+</style>
+</head>
+<body>
+<div class="contenedor">
+<h1>🤖 Gana por Anuncios</h1>
 <p>Bienvenido, amigo 👋</p>
-
-<div class="puntos" id="puntos">
-  💰 0 puntos
-</div>
-
-<button id="ganar" onclick="verAnuncio()">
-  📺 Ganar con anuncios
-</button>
-
-<a href="https://t.me/Ganaporanuncios_bot" target="_blank">
-  <button id="bot">
-    🚀 Abrir bot en Telegram
-  </button>
-</a>
-
+<div class="puntos" id="puntos">💰 0 puntos</div>
+<button id="ganar" onclick="verAnuncio()">📺 Ganar con anuncios</button>
+<a href="https://t.me/Ganaporanuncios_bot" target="_blank"><button id="bot">🚀 Abrir bot en Telegram</button></a>
 <div id="mensaje"></div>
-
-  </div>  <script>
-
-    let puntos = 0;
-    let anuncioActivo = false;
-
-    function verAnuncio() {
-
-      if (anuncioActivo) {
-        return;
-      }
-
-      anuncioActivo = true;
-
-      const boton = document.getElementById("ganar");
-      const mensaje = document.getElementById("mensaje");
-
-      boton.disabled = true;
-
-      let segundos = 10;
-
-      mensaje.innerHTML =
-        "📺 ANUNCIO DE PRUEBA<br><br>" +
-        "Espera " + segundos + " segundos...";
-
-      const contador = setInterval(function() {
-
-        segundos--;
-
-        if (segundos > 0) {
-
-          mensaje.innerHTML =
-            "📺 ANUNCIO DE PRUEBA<br><br>" +
-            "Espera " + segundos + " segundos...";
-
-        } else {
-
-          clearInterval(contador);
-
-          puntos += 25;
-
-          document.getElementById("puntos").innerHTML =
-            "💰 " + puntos + " puntos";
-
-          mensaje.innerHTML =
-            "✅ Anuncio de prueba completado.<br><br>" +
-            "🎁 +25 puntos de prueba";
-
-          boton.disabled = false;
-
-          anuncioActivo = false;
-        }
-
-      }, 1000);
-    }
-
-  </script></body>
+</div>
+<script>
+let puntos=0,anuncioActivo=false;
+function verAnuncio(){
+if(anuncioActivo)return;
+anuncioActivo=true;
+const boton=document.getElementById("ganar"),mensaje=document.getElementById("mensaje");
+boton.disabled=true;
+let segundos=10;
+mensaje.innerHTML="📺 ANUNCIO DE PRUEBA<br><br>Espera "+segundos+" segundos...";
+const contador=setInterval(function(){
+segundos--;
+if(segundos>0){
+mensaje.innerHTML="📺 ANUNCIO DE PRUEBA<br><br>Espera "+segundos+" segundos...";
+}else{
+clearInterval(contador);
+puntos+=10;
+document.getElementById("puntos").innerHTML="💰 "+puntos+" puntos";
+mensaje.innerHTML="✅ Anuncio de prueba completado.<br><br>🎁 +10 puntos de prueba";
+boton.disabled=false;
+anuncioActivo=false;
+}
+},1000);
+}
+</script>
+</body>
 </html>
