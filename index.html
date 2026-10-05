@@ -1,14 +1,15 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Ganar por Anuncios</title>
 <style>
 body{font-family:Arial;text-align:center;margin:0;padding:30px 20px;background:#f4f6f8;color:#222}
-.contenedor{max-width:420px;margin:auto;background:white;padding:25px;border-radius:18px;box-shadow:0 4px 15px rgba(0,0,0,.12)}
+.contenedor{max-width:420px;margin:auto;background:#fff;padding:25px;border-radius:18px;box-shadow:0 4px 15px rgba(0,0,0,.12)}
 .puntos{font-size:28px;font-weight:bold;margin:20px 0}
 button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:12px;font-size:17px}
-#ganar{background:#229ed9;color:white}
+#ganar{background:#229ed9;color:#fff}
 #bot{background:#e9eef2;color:#222}
 #mensaje{margin-top:20px;min-height:30px}
 </style>
@@ -22,24 +23,47 @@ button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:12px;font-
 <a href="https://t.me/Ganaporanuncios_bot" target="_blank"><button id="bot">🚀 Abrir bot en Telegram</button></a>
 <div id="mensaje"></div>
 </div>
+
 <script>
+const APPS_SCRIPT="https://script.google.com/macros/s/AKfycbyFPR_N2dHKjHKY1gQYdY-PdlueUv9Hj5sWEcMODwlwmEgdsURckZM9pecENv8TqZfKQA/exec";
 let puntos=0,anuncioActivo=false;
+
 function verAnuncio(){
 if(anuncioActivo)return;
+if(!window.Telegram||!Telegram.WebApp){
+document.getElementById("mensaje").innerHTML="⚠️ Abre esta página desde Telegram.";
+return;
+}
+const usuario=Telegram.WebApp.initDataUnsafe.user;
+if(!usuario){
+document.getElementById("mensaje").innerHTML="⚠️ No se pudo identificar tu cuenta de Telegram.";
+return;
+}
 anuncioActivo=true;
 const boton=document.getElementById("ganar"),mensaje=document.getElementById("mensaje");
 boton.disabled=true;
 let segundos=10;
 mensaje.innerHTML="📺 ANUNCIO DE PRUEBA<br><br>Espera "+segundos+" segundos...";
-const contador=setInterval(function(){
+const contador=setInterval(async function(){
 segundos--;
 if(segundos>0){
 mensaje.innerHTML="📺 ANUNCIO DE PRUEBA<br><br>Espera "+segundos+" segundos...";
 }else{
 clearInterval(contador);
-puntos+=10;
+mensaje.innerHTML="⏳ Guardando tus puntos...";
+try{
+const respuesta=await fetch(APPS_SCRIPT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo:"miniapp",chatId:String(usuario.id),accion:"prueba10"})});
+const datos=await respuesta.json();
+if(datos.ok){
+puntos=datos.puntos;
 document.getElementById("puntos").innerHTML="💰 "+puntos+" puntos";
-mensaje.innerHTML="✅ Anuncio de prueba completado.<br><br>🎁 +10 puntos de prueba";
+mensaje.innerHTML="✅ Prueba completada.<br><br>🎁 +10 puntos";
+}else{
+mensaje.innerHTML="⚠️ "+(datos.error||"No se pudieron guardar los puntos.");
+}
+}catch(error){
+mensaje.innerHTML="⚠️ No se pudo conectar con el servidor.";
+}
 boton.disabled=false;
 anuncioActivo=false;
 }
