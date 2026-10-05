@@ -7,11 +7,23 @@ function enviar(accion){
 if(!tg||!tg.initDataUnsafe||!tg.initDataUnsafe.user)return Promise.reject("Usuario no identificado");
 return fetch(APPS_SCRIPT,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({tipo:"miniapp",chatId:String(tg.initDataUnsafe.user.id),accion:accion})}).then(r=>r.json());
 }
-function cargarPuntos(){
+function cargarPuntos(intentos=0){
+if(!tg||!tg.initDataUnsafe||!tg.initDataUnsafe.user){
+if(intentos<10)return setTimeout(()=>cargarPuntos(intentos+1),500);
+document.getElementById("puntos").innerHTML="⚠️ Abre la Mini App desde Telegram";
+return;
+}
 enviar("consultar").then(d=>{
-if(d.ok){puntos=d.puntos;document.getElementById("puntos").innerHTML="💰 "+puntos+" puntos"}
-else document.getElementById("puntos").innerHTML="💰 0 puntos";
-}).catch(()=>{document.getElementById("puntos").innerHTML="💰 0 puntos"});
+if(d.ok){
+puntos=d.puntos;
+document.getElementById("puntos").innerHTML="💰 "+puntos+" puntos";
+}else{
+document.getElementById("puntos").innerHTML="⚠️ No se pudieron cargar los puntos";
+}
+}).catch(()=>{
+if(intentos<3)setTimeout(()=>cargarPuntos(intentos+1),1000);
+else document.getElementById("puntos").innerHTML="⚠️ Error al consultar puntos";
+});
 }
 function verAnuncio(){
 if(activo)return;
@@ -31,5 +43,5 @@ else m.innerHTML="⚠️ "+(d.error||"El sistema no responde.");
 }
 },1000);
 }
-cargarPuntos();
+setTimeout(()=>cargarPuntos(),1000);
 </script></body></html>
