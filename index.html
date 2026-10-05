@@ -1,24 +1,35 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Ganar por Anuncios</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>body{font-family:Arial;text-align:center;margin:0;padding:30px 20px;background:#f4f6f8;color:#222}.contenedor{max-width:420px;margin:auto;background:#fff;padding:25px;border-radius:18px}.puntos{font-size:28px;font-weight:bold;margin:20px 0}button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:12px;font-size:17px}#ganar{background:#229ed9;color:#fff}#bot{background:#e9eef2;color:#222}#mensaje{margin-top:20px;min-height:30px}</style></head><body><div class="contenedor"><h1>🤖 Gana por Anuncios</h1><p>Bienvenido, amigo 👋</p><div class="puntos" id="puntos">💰 0 puntos</div><button id="ganar" onclick="verAnuncio()">📺 Ganar con anuncios</button><a href="https://t.me/Ganaporanuncios_bot"><button id="bot">🚀 Abrir bot en Telegram</button></a><div id="mensaje"></div></div><script>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Ganar por Anuncios</title><script src="https://telegram.org/js/telegram-web-app.js"></script><style>body{font-family:Arial;text-align:center;margin:0;padding:30px 20px;background:#f4f6f8;color:#222}.contenedor{max-width:420px;margin:auto;background:#fff;padding:25px;border-radius:18px}.puntos{font-size:28px;font-weight:bold;margin:20px 0}button{width:100%;padding:15px;margin-top:12px;border:0;border-radius:12px;font-size:17px}#ganar{background:#229ed9;color:#fff}#bot{background:#e9eef2;color:#222}#mensaje{margin-top:20px;min-height:30px}</style></head><body><div class="contenedor"><h1>🤖 Gana por Anuncios</h1><p>Bienvenido, amigo 👋</p><div class="puntos" id="puntos">💰 Cargando...</div><button id="ganar" onclick="verAnuncio()">📺 Ganar con anuncios</button><a href="https://t.me/Ganaporanuncios_bot"><button id="bot">🚀 Abrir bot en Telegram</button></a><div id="mensaje"></div></div><script>
 const APPS_SCRIPT="https://bot-puente.tikbuelvas.workers.dev/";
 let puntos=0,activo=false;
+const tg=window.Telegram&&Telegram.WebApp;
+if(tg){tg.ready();tg.expand()}
+function enviar(accion){
+if(!tg||!tg.initDataUnsafe||!tg.initDataUnsafe.user)return Promise.reject("Usuario no identificado");
+return fetch(APPS_SCRIPT,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({tipo:"miniapp",chatId:String(tg.initDataUnsafe.user.id),accion:accion})}).then(r=>r.json());
+}
+function cargarPuntos(){
+enviar("consultar").then(d=>{
+if(d.ok){puntos=d.puntos;document.getElementById("puntos").innerHTML="💰 "+puntos+" puntos"}
+else document.getElementById("puntos").innerHTML="💰 0 puntos";
+}).catch(()=>{document.getElementById("puntos").innerHTML="💰 0 puntos"});
+}
 function verAnuncio(){
 if(activo)return;
-const tg=window.Telegram&&Telegram.WebApp;
 if(!tg||!tg.initDataUnsafe||!tg.initDataUnsafe.user){document.getElementById("mensaje").innerHTML="⚠️ Abre la Mini App desde Telegram.";return}
-const id=String(tg.initDataUnsafe.user.id),b=document.getElementById("ganar"),m=document.getElementById("mensaje");
+const b=document.getElementById("ganar"),m=document.getElementById("mensaje");
 activo=true;b.disabled=true;let s=10;
 m.innerHTML="📺 ANUNCIO DE PRUEBA<br><br>Espera "+s+" segundos...";
-const t=setInterval(async()=>{
+const t=setInterval(()=>{
 s--;
 if(s>0)m.innerHTML="📺 ANUNCIO DE PRUEBA<br><br>Espera "+s+" segundos...";
 else{
 clearInterval(t);m.innerHTML="⏳ Guardando puntos...";
-try{
-const r=await fetch(APPS_SCRIPT,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({tipo:"miniapp",chatId:id,accion:"prueba10"})});
-const d=await r.json();
-if(d.ok){puntos=d.puntos;document.getElementById("puntos").innerHTML="💰 "+puntos+" puntos";m.innerHTML="✅ Prueba completada.<br><br>🎁 +10 puntos"}else m.innerHTML="⚠️ "+(d.error||"El sistema no responde.");
-}catch(e){m.innerHTML="⚠️ El sistema no responde."}
-b.disabled=false;activo=false
-}},1000)}
-if(window.Telegram&&Telegram.WebApp){Telegram.WebApp.ready();Telegram.WebApp.expand()}
+enviar("prueba10").then(d=>{
+if(d.ok){puntos=d.puntos;document.getElementById("puntos").innerHTML="💰 "+puntos+" puntos";m.innerHTML="✅ Prueba completada.<br><br>🎁 +10 puntos"}
+else m.innerHTML="⚠️ "+(d.error||"El sistema no responde.");
+}).catch(()=>m.innerHTML="⚠️ El sistema no responde.").finally(()=>{b.disabled=false;activo=false});
+}
+},1000);
+}
+cargarPuntos();
 </script></body></html>
