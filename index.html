@@ -22,7 +22,6 @@ setTimeout(cargarPuntos,1000);
 return;
 }
 enviar("consultar").then(d=>{
-document.getElementById("mensaje").innerText="Respuesta: "+JSON.stringify(d);
 if(d.ok){
 puntos=Number(d.puntos)||0;
 document.getElementById("puntos").textContent="💰 "+puntos+" puntos";
