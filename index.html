@@ -29,7 +29,7 @@ document.getElementById("puntos").textContent="💰 "+puntos+" puntos";
 document.getElementById("puntos").innerHTML="⚠️ "+(d.error||"Error");
 }
 }).catch(e=>{
-document.getElementById("mensaje").innerText="Error: "+String(e);
+
 document.getElementById("puntos").innerHTML="⚠️ Error al consultar";
 });
 }
